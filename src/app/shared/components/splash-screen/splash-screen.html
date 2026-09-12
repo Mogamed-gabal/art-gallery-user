@@ -1,0 +1,62 @@
+@if (visible()) {
+  <div class="splash" [class.splash--closing]="closing()" (click)="skip()">
+    <div class="splash__ambient-glow"></div>
+    <div class="splash__particles">
+      <span class="particle p1"></span>
+      <span class="particle p2"></span>
+      <span class="particle p3"></span>
+      <span class="particle p4"></span>
+    </div>
+
+    <div class="splash__container">
+      <!-- Luxury Geometric Art Crest SVG -->
+      <div class="splash__crest">
+        <svg class="splash__svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer rotating dashed orbit -->
+          <circle class="orbit-ring" cx="80" cy="80" r="74" stroke="url(#goldGrad)" stroke-width="1.2" stroke-dasharray="6 8" />
+          
+          <!-- Inner diamond geometric shield -->
+          <polygon class="shield-poly" points="80,14 146,80 80,146 14,80" stroke="url(#goldGrad)" stroke-width="1.4" fill="rgba(198, 162, 106, 0.04)" />
+          
+          <!-- Inner circle -->
+          <circle class="inner-circle" cx="80" cy="80" r="48" stroke="url(#goldGrad)" stroke-width="1" />
+          
+          <!-- Handcrafted calligraphy Monogram A & Light Rays -->
+          <path class="letter-path" d="M80 38 L98 108 M80 38 L62 108 M69 88 L91 88" stroke="url(#goldGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" />
+          <path class="brush-stroke" d="M52 118 C65 110, 95 110, 108 118" stroke="url(#clayGrad)" stroke-width="2.2" stroke-linecap="round" />
+
+          <!-- Center jewel point -->
+          <circle cx="80" cy="38" r="3.5" fill="#d4af37" />
+
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fae0ad" />
+              <stop offset="50%" stop-color="#c6a26a" />
+              <stop offset="100%" stop-color="#8c6a38" />
+            </linearGradient>
+            <linearGradient id="clayGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#e07a5f" />
+              <stop offset="100%" stop-color="#a8523f" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Typography -->
+      <div class="splash__brand">
+        <h1 class="splash__title">ANAS YA<span>3</span>QUB</h1>
+        <p class="splash__arabic">معرض أنس يعقوب للفنون التشكيلية</p>
+        <span class="splash__tagline">FINE ART ATELIER · CURATED COLLECTION</span>
+      </div>
+
+      <!-- Luxury Progress Loader -->
+      <div class="splash__loader">
+        <div class="splash__loader-bar"></div>
+      </div>
+
+      <button type="button" class="splash__skip-hint" (click)="skip()">
+        تخطي · Skip
+      </button>
+    </div>
+  </div>
+}

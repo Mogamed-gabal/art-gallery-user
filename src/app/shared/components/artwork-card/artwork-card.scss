@@ -1,0 +1,150 @@
+.art-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s var(--ease-out);
+
+  &:hover {
+    transform: translateY(-6px);
+  }
+}
+
+.art-card__image {
+  position: relative;
+  display: block;
+  aspect-ratio: 0.84;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.35s var(--ease-out), border-color 0.35s;
+  border: 1px solid var(--line);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s;
+  }
+}
+
+.art-card:hover .art-card__image {
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.16);
+  border-color: var(--gold);
+
+  img {
+    transform: scale(1.06);
+  }
+}
+
+.art-card__tag {
+  position: absolute;
+  top: 12px;
+  inset-inline-start: 12px;
+  padding: 0.4rem 0.7rem;
+  background: rgba(20, 19, 18, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f7f3ee;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  text-transform: uppercase;
+  z-index: 2;
+  transition: transform 0.25s, background 0.25s;
+}
+
+.art-card:hover .art-card__tag {
+  transform: translateY(-1px);
+  background: rgba(20, 19, 18, 0.95);
+  border-color: var(--gold);
+}
+
+.art-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-top: 1.1rem;
+
+  .eyebrow {
+    margin: 0 0 0.35rem;
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    margin: 0;
+    font: 600 1.15rem / 1.25 var(--font-display);
+    color: var(--ink);
+    transition: color 0.2s;
+  }
+}
+
+.art-card:hover .art-card__meta h3 {
+  color: var(--gold);
+}
+
+.price-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price {
+  white-space: nowrap;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+
+  small {
+    font-size: 0.6rem;
+    color: var(--muted);
+    font-weight: 400;
+    margin-inline-start: 2px;
+  }
+}
+
+.original-price {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.view-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.25s;
+
+  span {
+    color: var(--gold);
+    transition: transform 0.25s var(--ease-out);
+    display: inline-block;
+  }
+
+  &:hover {
+    color: var(--ink);
+
+    span {
+      transform: translate(3px, -3px);
+    }
+  }
+}
+
+.art-card:hover .view-link {
+  color: var(--ink);
+
+  span {
+    transform: translate(3px, -3px);
+  }
+}

@@ -1,0 +1,156 @@
+<main>
+  <section class="hero hero--banner" id="top">
+    @if (heroImage()) {
+      <div class="hero__bg" [style.background-image]="'url(' + heroImage() + ')'"></div>
+    }
+    <div class="hero__overlay"></div>
+    <div class="container hero__content">
+      <div class="hero__copy">
+        <p class="eyebrow">{{ heroText('eyebrow', locale.locale() === 'ar' ? 'معرض أنس يعقوب · مجموعة فنية حصرية' : 'ANAS YA3QUB · EXCLUSIVE ART COLLECTION') }}</p>
+        <h1>{{ heroText('title') }}</h1>
+        <p class="hero__lead">{{ heroText('subtitle') }}</p>
+        <div class="hero__actions">
+          <a class="btn btn--gold" routerLink="/artworks">
+            {{ locale.locale() === 'ar' ? 'استكشف الأعمال' : 'Explore works' }} <span>↗</span>
+          </a>
+          <a class="btn btn--outline" (click)="scrollToSection('contact', $event)" href="#contact">
+            {{ locale.locale() === 'ar' ? 'تواصل مع الفنان' : 'Get in touch' }} <span>↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section container" id="works">
+    <div class="section-intro">
+      <div>
+        <p class="eyebrow">01 · {{ locale.locale() === 'ar' ? 'أعمال مختارة' : 'SELECTED WORKS' }}</p>
+        <h2>{{ locale.locale() === 'ar' ? 'أعمال مختارة' : 'Selected works' }}</h2>
+      </div>
+      <a class="text-btn" routerLink="/artworks">{{ locale.locale() === 'ar' ? 'رؤية المزيد' : 'View all works' }} <span>↗</span></a>
+    </div>
+    <div class="art-grid" [class.loading]="loading()">
+      @for (artwork of featured(); track artwork.id) {
+        <app-artwork-card [artwork]="artwork" />
+      } @empty {
+        @if (!loading()) {
+          <p class="empty">{{ error() ? (locale.locale() === 'ar' ? 'تعذر تحميل الأعمال الفنية.' : 'Could not load artworks.') : (locale.locale() === 'ar' ? 'لا توجد أعمال فنية حتى الآن.' : 'No artworks yet.') }}</p>
+        }
+      }
+    </div>
+  </section>
+
+  @if (originals().length) {
+    <section class="originals" id="originals">
+      <div class="container">
+        <div class="section-intro">
+          <div>
+            <p class="eyebrow">02 · {{ locale.locale() === 'ar' ? 'قطع أصلية فريدة' : 'ONE OF ONE' }}</p>
+            <h2>{{ locale.locale() === 'ar' ? 'الأعمال الأصلية' : 'Original pieces' }}</h2>
+          </div>
+          <p class="section-note">{{ locale.locale() === 'ar' ? 'قطع فريدة، لا تتكرر.' : 'Unique pieces, never repeated.' }}</p>
+        </div>
+        <div class="original-grid">
+          @for (artwork of originals(); track artwork.id) {
+            <app-artwork-card [artwork]="artwork" />
+          }
+        </div>
+      </div>
+    </section>
+  }
+
+  <section class="about section container" id="about">
+    <div class="about__image">
+      <div class="about__line"></div>
+      @if (aboutImage1() || aboutImage()) {
+        <img [src]="aboutImage1() || aboutImage()" alt="Artist studio" loading="lazy">
+      }
+      @if (aboutImage2()) {
+        <img class="about__image-secondary" [src]="aboutImage2()" alt="Artwork creation process" loading="lazy">
+      }
+    </div>
+    <div class="about__copy">
+      <p class="eyebrow">03 · {{ locale.locale() === 'ar' ? 'القصة والرؤية' : 'THE STORY' }}</p>
+      <h2>{{ aboutText('title') }}</h2>
+      <p>{{ aboutText('bio') }}</p>
+      <a class="text-btn" (click)="scrollToSection('contact', $event)" href="#contact">{{ locale.locale() === 'ar' ? 'تواصل مع الفنان' : 'Get in touch' }} <span>↗</span></a>
+    </div>
+  </section>
+
+  @if (courses().length) {
+    <section class="section courses container" id="courses">
+      <div class="section-intro">
+        <div>
+          <p class="eyebrow">04 · {{ locale.locale() === 'ar' ? 'ورش العمل والتدريب' : 'LEARN WITH ME' }}</p>
+          <h2>{{ locale.locale() === 'ar' ? 'الدورات وورش العمل' : 'Workshops & Courses' }}</h2>
+        </div>
+      </div>
+      <div class="course-grid">
+        @for (course of courses(); track course.id) {
+          <a class="course" [href]="course.externalUrl || course.welcomeVideoUrl || '#'" target="_blank" rel="noreferrer">
+            <span class="course__number">0{{ $index + 1 }}</span>
+            <h3>{{ courseTitle(course) }}</h3>
+            <p>{{ courseDescription(course) }}</p>
+            @if (course.welcomeVideoUrl) {
+              <div style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--gold);">
+                <span>▶ {{ locale.locale() === 'ar' ? 'فيديو تعريفي' : 'Intro Video' }}</span>
+              </div>
+            }
+            <span class="course__arrow">↗</span>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <section class="contact section container" id="contact">
+    <div class="contact__header">
+      <p class="eyebrow">05 · {{ locale.locale() === 'ar' ? 'تواصل معنا' : 'GET IN TOUCH' }}</p>
+      <h2>{{ contactText('title') }}</h2>
+      @if (contactText('description')) {
+        <p class="contact__desc">{{ contactText('description') }}</p>
+      }
+    </div>
+
+    <div class="contact__channels">
+      @if (contactWhatsApp()) {
+        <a [href]="contactWhatsAppLink()" target="_blank" rel="noreferrer" class="contact__channel-card contact__channel--whatsapp">
+          <span class="channel__icon">💬</span>
+          <div class="channel__info">
+            <span class="channel__label">{{ locale.locale() === 'ar' ? 'واتساب' : 'WhatsApp' }}</span>
+            <strong class="channel__value">{{ contactWhatsApp() }}</strong>
+          </div>
+          <span class="channel__arrow">↗</span>
+        </a>
+      }
+
+      @if (contactPhone()) {
+        <a [href]="'tel:' + contactPhone()" class="contact__channel-card">
+          <span class="channel__icon">📞</span>
+          <div class="channel__info">
+            <span class="channel__label">{{ locale.locale() === 'ar' ? 'الهاتف' : 'Phone' }}</span>
+            <strong class="channel__value">{{ contactPhone() }}</strong>
+          </div>
+          <span class="channel__arrow">↗</span>
+        </a>
+      }
+
+      @if (contactEmail()) {
+        <a [href]="'mailto:' + contactEmail()" class="contact__channel-card">
+          <span class="channel__icon">✉</span>
+          <div class="channel__info">
+            <span class="channel__label">{{ locale.locale() === 'ar' ? 'البريد الإلكتروني' : 'Email' }}</span>
+            <strong class="channel__value">{{ contactEmail() }}</strong>
+          </div>
+          <span class="channel__arrow">↗</span>
+        </a>
+      }
+
+      <div class="contact__actions">
+        <a class="btn btn--clay" routerLink="/checkout">
+          {{ locale.locale() === 'ar' ? 'ابدأ طلبك الآن' : 'Start a request' }} <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,79 @@
+:root {
+  --paper: #f5f1ea;
+  --ink: #181716;
+  --surface: #ece5dc;
+  --muted: #78716a;
+  --gold: #b38b52;
+  --clay: #a8523f;
+  --line: rgba(24, 23, 22, 0.12);
+  --font-display: 'Cormorant Garamond', 'Noto Kufi Arabic', serif;
+  --font-body: 'DM Sans', 'Noto Kufi Arabic', sans-serif;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --shadow: 0 20px 50px rgba(24, 23, 22, 0.1);
+}
+
+html.dark {
+  --paper: #121110;
+  --ink: #f5f1ea;
+  --surface: #1d1b1a;
+  --muted: #a19a90;
+  --gold: #d4af37;
+  --clay: #c96a54;
+  --line: rgba(245, 241, 234, 0.12);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+button, input, textarea {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: min(1240px, calc(100% - 3.5rem));
+  margin-inline: auto;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@media (max-width: 520px) {
+  .container {
+    width: min(100% - 2rem, 1240px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

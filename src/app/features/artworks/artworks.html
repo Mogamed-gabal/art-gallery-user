@@ -1,0 +1,25 @@
+<main class="catalog container">
+  <div class="catalog__head">
+    <p class="eyebrow">THE COLLECTION</p>
+    <h1>{{ locale.locale() === 'ar' ? 'كل الأعمال' : 'All works' }}</h1>
+    <p>{{ locale.locale() === 'ar' ? 'اكتشف مجموعة من القطع الأصلية والأعمال المختارة.' : 'Explore a collection of original pieces and selected works.' }}</p>
+  </div>
+  <div class="filters">
+    <button [class.active]="!selected()" (click)="select('')">{{ locale.locale() === 'ar' ? 'الكل' : 'All' }}</button>
+    @for (category of categories(); track category.id) {
+      <button [class.active]="selected() === category.id" (click)="select(category.id)">
+        {{ categoryLabel(category) }}
+      </button>
+    }
+  </div>
+  <div class="grid">
+    @for (artwork of artworks(); track artwork.id) {
+      <app-artwork-card [artwork]="artwork" />
+    } @empty {
+      @if (!loading()) {
+        <p>{{ locale.locale() === 'ar' ? 'لا توجد أعمال في هذا التصنيف.' : 'No works in this category.' }}</p>
+      }
+    }
+  </div>
+</main>
+

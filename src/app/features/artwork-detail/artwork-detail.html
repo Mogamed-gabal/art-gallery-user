@@ -1,0 +1,54 @@
+@if (artwork(); as art) {
+  <main class="detail container">
+    <div class="detail__visuals">
+      <div class="detail__image">
+        <img [src]="image()" [alt]="title(art)" />
+        <span *ngIf="!isAvailable" class="sold-out-badge">
+          {{ locale.locale() === 'ar' ? 'تم البيع' : 'Sold out' }}
+        </span>
+      </div>
+
+      <!-- معرض الصور المصغرة -->
+      <div class="detail__gallery" *ngIf="images().length > 1">
+        <button
+          *ngFor="let thumb of images()"
+          type="button"
+          class="gallery-thumb"
+          [class.active]="image() === thumb"
+          (click)="setImage(thumb)"
+        >
+          <img [src]="thumb" alt="Thumbnail" />
+        </button>
+      </div>
+    </div>
+
+    <div class="detail__copy">
+      <p class="eyebrow">{{ categoryLabel(art) }}</p>
+      <h1>{{ title(art) }}</h1>
+      <p class="detail__description">{{ description(art) }}</p>
+
+      <div class="detail__price">
+        <span *ngIf="art.onSale && art.discountPrice" class="sale-price">
+          {{ art.discountPrice }} <small>EGP</small>
+          <span class="original-price-strike">{{ art.price }} EGP</span>
+        </span>
+        <span *ngIf="!art.onSale || !art.discountPrice">
+          {{ art.price ?? '—' }} <small>EGP</small>
+        </span>
+      </div>
+
+      <div class="detail__actions">
+        <a *ngIf="isAvailable" class="buy" [routerLink]="['/checkout']" [queryParams]="{ artworkId: art.id }">
+          {{ locale.locale() === 'ar' ? 'اشترِ هذه القطعة' : 'Buy this piece' }} <span>↗</span>
+        </a>
+        <div *ngIf="!isAvailable" class="buy disabled">
+          {{ locale.locale() === 'ar' ? 'القطعة غير متوفرة حالياً' : 'Piece currently unavailable' }}
+        </div>
+        <a class="back" routerLink="/artworks">
+          ← {{ locale.locale() === 'ar' ? 'عودة إلى الأعمال' : 'Back to collection' }}
+        </a>
+      </div>
+    </div>
+  </main>
+}
+

@@ -1,0 +1,8 @@
+<app-splash-screen /><app-navbar /><router-outlet />
+<footer class="site-footer container">
+  <span class="footer-brand">{{ siteTitle }}</span>
+  <span>© {{ currentYear }} — {{ locale.locale() === 'ar' ? 'جميع الحقوق محفوظة' : 'All rights reserved.' }}</span>
+  @if (email) {
+    <a [href]="'mailto:' + email">{{ email }} ↗</a>
+  }
+</footer>

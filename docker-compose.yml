@@ -1,0 +1,9 @@
+services:
+  anasya3qub-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anasya3qub-web
+    ports:
+      - "4300:80"
+    restart: unless-stopped

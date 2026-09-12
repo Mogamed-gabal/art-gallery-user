@@ -1,0 +1,17 @@
+<header class="nav-shell">
+  <div class="nav container">
+    <a routerLink="/" (click)="scrollToSection('top', $event)" style="text-decoration: none; color: inherit; display: flex; align-items: center;"><app-brand-mark /></a>
+    <nav class="nav__links" [class.is-open]="menuOpen">
+      <a routerLink="/" fragment="works" (click)="scrollToSection('works', $event)">{{ locale.locale() === 'ar' ? 'الأعمال' : 'Works' }}</a>
+      <a routerLink="/" fragment="about" (click)="scrollToSection('about', $event)">{{ locale.locale() === 'ar' ? 'عن الفنان' : 'About' }}</a>
+      <a routerLink="/" fragment="courses" (click)="scrollToSection('courses', $event)">{{ locale.locale() === 'ar' ? 'الدورات' : 'Courses' }}</a>
+      <a routerLink="/" fragment="contact" (click)="scrollToSection('contact', $event)">{{ locale.locale() === 'ar' ? 'تواصل' : 'Contact' }}</a>
+    </nav>
+    <div class="nav__actions">
+      <button class="icon-btn" (click)="theme.toggle()" [attr.aria-label]="theme.dark() ? 'Light mode' : 'Dark mode'">{{ theme.dark() ? '☼' : '◐' }}</button>
+      <button class="locale-btn" (click)="toggleLocale()">{{ locale.locale() === 'en' ? 'عربي' : 'EN' }}</button>
+      <button class="menu-btn" (click)="menuOpen = !menuOpen">☰</button>
+    </div>
+  </div>
+</header>
+

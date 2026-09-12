@@ -1,0 +1,160 @@
+<main class="checkout container">
+  <div class="checkout__head">
+    <p class="eyebrow">{{ isCustomRequest ? (locale.locale() === 'ar' ? 'طلب عمل فني خاص' : 'CUSTOM COMMISSION') : (locale.locale() === 'ar' ? 'شراء مباشر' : 'DIRECT PURCHASE') }}</p>
+    <h1>{{ isCustomRequest ? (locale.locale() === 'ar' ? 'ابدأ طلبك الآن' : 'Start your commission') : (locale.locale() === 'ar' ? 'أكمل طلبك' : 'Complete your order') }}</h1>
+    <p>{{ isCustomRequest ? (locale.locale() === 'ar' ? 'أرسل تفاصيل فكرتك وصورك التوضيحية (من صورة إلى 5 صور)، وسيتواصل معك الفنان أنس يعقوب مباشرة لمناقشة العمل وبدء تنفيذه.' : 'Share your ideas and 1 to 5 reference photos. Artist Anas Yaqoub will reach out directly.') : (locale.locale() === 'ar' ? 'بدون حساب، وبدون خطوات زائدة.' : 'No account, no unnecessary steps.') }}</p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="checkout__alert checkout__alert--error">
+      <span>⚠</span>
+      <p>{{ errorMessage() }}</p>
+    </div>
+  }
+
+  @if (requestSuccess()) {
+    <div class="success">
+      <span class="success__icon">✦</span>
+      <h2>{{ locale.locale() === 'ar' ? 'تم إرسال طلبك بنجاح!' : 'Request Sent Successfully!' }}</h2>
+      <p class="success__desc">
+        {{ locale.locale() === 'ar' 
+          ? 'شكراً لتواصلك! تم استلام بياناتك وتفاصيل اللوحة والصور بنجاح، وسيتواصل معك الفنان أنس يعقوب مباشرة عبر الواتساب أو الهاتف لمناقشة التفاصيل والبدء في تنفيذ العمل.' 
+          : 'Thank you! Your request details and reference images have been received. Artist Anas Yaqoub will reach out directly via WhatsApp or phone.' }}
+      </p>
+      <div class="success__actions">
+        <a routerLink="/" class="submit" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+          {{ locale.locale() === 'ar' ? 'العودة للصفحة الرئيسية' : 'Return to Home' }}
+          <span>{{ locale.locale() === 'ar' ? '←' : '→' }}</span>
+        </a>
+      </div>
+    </div>
+  } @else if (success(); as order) {
+    <div class="success">
+      <span class="success__icon">✦</span>
+      <h2>{{ locale.locale() === 'ar' ? 'تم إنشاء طلبك بنجاح' : 'Your order is in' }}</h2>
+      <p>{{ locale.locale() === 'ar' ? 'رقم الطلب' : 'Order number' }}: <strong>{{ order.orderNumber || order.id }}</strong></p>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid">
+        <label>
+          {{ locale.locale() === 'ar' ? 'الاسم الكامل *' : 'Full name *' }}
+          <input formControlName="customerName" [placeholder]="locale.locale() === 'ar' ? 'مثال: محمد أحمد' : 'e.g. John Doe'" required />
+        </label>
+        <label>
+          {{ locale.locale() === 'ar' ? 'رقم الهاتف *' : 'Phone number *' }}
+          <input formControlName="phone" [placeholder]="locale.locale() === 'ar' ? '01012345678' : '+20 1012345678'" required />
+        </label>
+        <label>
+          {{ locale.locale() === 'ar' ? 'رقم الواتساب (اختياري)' : 'WhatsApp (optional)' }}
+          <input formControlName="whatsappPhone" [placeholder]="locale.locale() === 'ar' ? 'رقم للتواصل السريع عبر واتساب' : 'For WhatsApp communication'" />
+        </label>
+        <label>
+          {{ locale.locale() === 'ar' ? 'البريد الإلكتروني (اختياري)' : 'Email (optional)' }}
+          <input type="email" formControlName="email" [placeholder]="locale.locale() === 'ar' ? 'name@example.com' : 'name@example.com'" />
+        </label>
+
+        @if (isCustomRequest) {
+          <!-- Custom commission description -->
+          <label class="wide">
+            {{ locale.locale() === 'ar' ? 'تفاصيل فكرة العمل والمقاس المطلوب *' : 'Artwork details, idea & required size *' }}
+            <textarea 
+              rows="4" 
+              formControlName="description" 
+              [placeholder]="locale.locale() === 'ar' ? 'اكتب بالتفصيل فكرة اللوحة، الألوان المفضلة، المقاسات التقريبية، وأي ملاحظات خاصة ترغب بها...' : 'Describe your vision, preferred colors, approximate dimensions, and any specific notes...'"
+              required></textarea>
+          </label>
+
+          <!-- Upload between 1 and 5 reference images -->
+          <div class="wide upload-section">
+            <div class="upload-section__header">
+              <div>
+                <span class="upload-section__title">
+                  {{ locale.locale() === 'ar' ? 'الصور المرجعية والتوضيحية (من 1 إلى 5 صور) *' : 'Reference & Inspiration Photos (1 to 5 images) *' }}
+                </span>
+                <p class="upload-section__subtitle">
+                  {{ locale.locale() === 'ar' ? 'أرفق صوراً توضيحية للوجه، المكان، أو الأسلوب اللوني المطلوب رسمه' : 'Upload photos of the subject, scene, or artistic style you want painted' }}
+                </p>
+              </div>
+              <span class="upload-badge" [class.upload-badge--complete]="selectedFiles.length >= 1">
+                {{ selectedFiles.length }} / 5 {{ locale.locale() === 'ar' ? 'صور' : 'images' }}
+              </span>
+            </div>
+
+            <!-- Drag & drop zone / click trigger -->
+            <div 
+              class="upload-dropzone" 
+              [class.dragging]="isDragging()"
+              (click)="fileInput.click()"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onFileDrop($event)">
+              <input 
+                #fileInput 
+                type="file" 
+                multiple 
+                accept="image/*" 
+                (change)="onFilesSelected($event)" 
+                style="display: none;" />
+              
+              <div class="upload-dropzone__content">
+                <span class="upload-dropzone__icon">⇪</span>
+                <p class="upload-dropzone__prompt">
+                  <strong>{{ locale.locale() === 'ar' ? 'انقر لاختيار الصور' : 'Click to select photos' }}</strong> 
+                  {{ locale.locale() === 'ar' ? 'أو اسحب وأفلت الصور هنا' : 'or drag and drop here' }}
+                </p>
+                <span class="upload-dropzone__hint">PNG, JPG, JPEG, WEBP ({{ locale.locale() === 'ar' ? 'من 1 إلى 5 صور كحد أقصى' : '1 to 5 images max' }})</span>
+              </div>
+            </div>
+
+            <!-- Previews Grid -->
+            @if (imagePreviews.length > 0) {
+              <div class="previews-grid">
+                @for (preview of imagePreviews; track $index) {
+                  <div class="preview-card">
+                    <img [src]="preview" [alt]="'صورة ' + ($index + 1)" />
+                    <button 
+                      type="button" 
+                      class="preview-card__remove" 
+                      (click)="removeFile($index)" 
+                      [title]="locale.locale() === 'ar' ? 'حذف الصورة' : 'Remove image'">
+                      ✕
+                    </button>
+                    <span class="preview-card__number">#{{ $index + 1 }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        } @else {
+          <!-- Direct Purchase Fields -->
+          <label class="wide">
+            {{ locale.locale() === 'ar' ? 'عنوان التوصيل *' : 'Shipping address *' }}
+            <textarea rows="4" formControlName="shippingAddress" required></textarea>
+          </label>
+          <label>
+            {{ locale.locale() === 'ar' ? 'تاريخ التسليم المفضل (اختياري)' : 'Preferred delivery date' }}
+            <input type="date" formControlName="preferredDeliveryDate" />
+          </label>
+        }
+      </div>
+
+      <!-- Completely hide summary for custom requests: no 'العمل المختار' and no 'EGP'! -->
+      @if (!isCustomRequest) {
+        <div class="checkout__summary">
+          <span>{{ getArtworkTitle() }}</span>
+          <strong>{{ (artwork()?.discountPrice ?? artwork()?.price) || '—' }} EGP</strong>
+        </div>
+      }
+
+      <div class="submit-wrap">
+        <button class="submit" type="submit" [disabled]="isSubmitDisabled">
+          {{ submitting() ? (locale.locale() === 'ar' ? 'جاري الإرسال...' : 'Submitting...') : (isCustomRequest ? (locale.locale() === 'ar' ? 'إرسال طلب العمل الفني إلى الفنان' : 'Send Request to Artist') : (locale.locale() === 'ar' ? 'المتابعة إلى الدفع' : 'Continue to payment')) }}
+          <span>{{ locale.locale() === 'ar' ? '←' : '→' }}</span>
+        </button>
+      </div>
+    </form>
+  }
+</main>
+
+

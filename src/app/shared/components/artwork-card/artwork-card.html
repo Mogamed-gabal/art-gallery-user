@@ -1,0 +1,22 @@
+<article class="art-card" [class.is-unavailable]="!available">
+  <a [routerLink]="['/artworks', artwork.id]" class="art-card__image">
+    <img [src]="image" [alt]="title" loading="lazy" />
+    <span class="art-card__tag">
+      {{ artwork.isBestSeller ? (locale.locale() === 'ar' ? 'مميز ⭐' : 'Featured ⭐') : (artwork.onSale ? (locale.locale() === 'ar' ? 'تخفيض' : 'Sale') : (locale.locale() === 'ar' ? 'قطعة أصلية' : 'Original')) }}
+    </span>
+  </a>
+  <div class="art-card__meta">
+    <div>
+      <p class="eyebrow">{{ categoryName }}</p>
+      <h3>{{ title }}</h3>
+    </div>
+    <div class="price-box">
+      <span class="price">{{ price }} <small>EGP</small></span>
+      <span *ngIf="originalPrice" class="original-price">{{ originalPrice }} EGP</span>
+    </div>
+  </div>
+  <a class="view-link" [routerLink]="['/artworks', artwork.id]">
+    {{ locale.locale() === 'ar' ? 'اكتشف القطعة' : 'Discover piece' }} <span>↗</span>
+  </a>
+</article>
+
