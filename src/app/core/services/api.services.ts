@@ -10,7 +10,7 @@ declare global {
   interface Window { __APP_CONFIG__?: { apiBaseUrl?: string }; }
 }
 
-const API_BASE_URL = (typeof window !== 'undefined' && window.__APP_CONFIG__?.apiBaseUrl) || 'http://localhost:3005/api/v1';
+const API_BASE_URL = (typeof window !== 'undefined' && window.__APP_CONFIG__?.apiBaseUrl) || 'https://art-gallery-infa.vercel.app/api/v1';
 
 @Injectable({ providedIn: 'root' })
 export class ApiClient {
@@ -86,7 +86,7 @@ export class OrderService {
 export class ClientRequestService {
   private readonly http = inject(HttpClient);
   create(formData: FormData): Observable<any> {
-    const url = (typeof window !== 'undefined' && window.__APP_CONFIG__?.apiBaseUrl) || 'http://localhost:3005/api/v1';
+    const url = (typeof window !== 'undefined' && window.__APP_CONFIG__?.apiBaseUrl) || 'https://art-gallery-infa.vercel.app/api/v1';
     return this.http.post(`${url}/client-requests`, formData);
   }
 }
