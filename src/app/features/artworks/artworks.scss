@@ -7,8 +7,8 @@
   max-width: 680px;
 
   h1 {
-    font: 500 clamp(4rem, 9vw, 8rem) / 0.9 var(--font-display);
-    letter-spacing: -0.07em;
+    font: 500 clamp(2.8rem, 8vw, 6.5rem) / 1.1 var(--font-display);
+    letter-spacing: -0.04em;
     margin: 1rem 0;
   }
 
@@ -62,13 +62,33 @@
 }
 
 @media (max-width: 700px) {
+  .catalog {
+    padding-top: 120px;
+    padding-bottom: 4rem;
+  }
+
+  .catalog__head h1 {
+    font-size: clamp(2.2rem, 8vw, 3.2rem);
+    line-height: 1.2;
+  }
+
+  .filters {
+    margin: 2.2rem 0 1.8rem;
+  }
+
   .grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 480px) {
+  .filters button {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.76rem;
+  }
+
   .grid {
     grid-template-columns: 1fr;
+    gap: 1.8rem 1rem;
   }
 }

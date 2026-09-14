@@ -548,7 +548,7 @@
       padding-inline: 1.5rem;
     }
     &__copy h1 {
-      font-size: 3rem;
+      font-size: 2.8rem;
     }
   }
 
@@ -573,19 +573,78 @@
   }
 }
 
+@media (max-width: 640px) {
+  .section-intro {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+
+    h2 {
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      line-height: 1.2;
+    }
+
+    .section-note {
+      max-width: 100%;
+    }
+  }
+
+  .about__image {
+    padding: 1rem;
+    overflow: hidden;
+
+    .about__image-secondary {
+      position: static;
+      width: 100%;
+      margin-top: 1rem;
+      inset-inline-end: auto;
+      bottom: auto;
+      border: 3px solid var(--paper);
+    }
+
+    .about__line {
+      display: none;
+    }
+  }
+
+  .section {
+    padding-block: 4.5rem;
+  }
+}
+
 @media (max-width: 520px) {
   .hero {
-    min-height: 520px;
+    min-height: auto;
+    padding-top: 100px;
+    padding-bottom: 3.5rem;
+
     &__content {
-      padding-inline: 1.2rem;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      padding-inline: 1rem;
     }
     &__copy h1 {
-      font-size: 2.4rem;
+      font-size: clamp(1.9rem, 7vw, 2.4rem);
+      line-height: 1.25;
+    }
+    &__copy .hero__lead {
+      font-size: 0.95rem;
+      line-height: 1.7;
     }
     &__actions {
       flex-direction: column;
       align-items: stretch;
       gap: 0.8rem;
+      width: 100%;
+      margin-top: 2rem;
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem 1.4rem;
+        box-sizing: border-box;
+      }
     }
   }
 
@@ -595,7 +654,29 @@
     grid-template-columns: 1fr;
   }
 
-  .section {
-    padding-block: 5.5rem;
+  .course {
+    min-height: auto;
+    padding: 1.4rem;
+
+    h3 {
+      margin-top: 1.8rem;
+      font-size: 1.4rem;
+    }
+  }
+
+  .contact {
+    padding-block: 3.5rem;
+
+    &__header h2 {
+      font-size: clamp(1.8rem, 6.5vw, 2.4rem);
+    }
+
+    &__channel-card {
+      padding: 0.9rem 1.1rem;
+    }
+
+    .channel__value {
+      font-size: 0.95rem;
+    }
   }
 }
