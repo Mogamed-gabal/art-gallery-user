@@ -115,6 +115,8 @@ export interface Course {
   updatedAt?: string;
 }
 
+export type PaymentCurrency = 'USD' | 'EUR';
+
 export interface CreateOrderPayload {
   customerName: string;
   phone: string;
@@ -122,6 +124,7 @@ export interface CreateOrderPayload {
   email?: string;
   shippingAddress: string;
   preferredDeliveryDate?: string;
+  paymentCurrency?: PaymentCurrency;
   items: Array<{ artworkId: string; quantity: number }>;
 }
 

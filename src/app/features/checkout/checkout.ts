@@ -1,10 +1,16 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArtworkService, ClientRequestService, OrderService } from '../../core/services/api.services';
-import { Artwork, OrderResponse } from '../../core/models/api.models';
+import { Artwork, OrderResponse, PaymentCurrency } from '../../core/models/api.models';
 import { LocaleService } from '../../core/services/ui.services';
+
+// Rough exchange rate display values (for UI only; real conversion happens on the server)
+const DISPLAY_RATES: Record<PaymentCurrency, number> = {
+  USD: 0.021,
+  EUR: 0.019,
+};
 
 @Component({
   selector: 'app-checkout',
@@ -25,6 +31,9 @@ export class CheckoutComponent {
   readonly requestSuccess = signal<boolean>(false);
   readonly errorMessage = signal<string | null>(null);
   readonly isDragging = signal<boolean>(false);
+
+  /** Selected payment currency */
+  readonly selectedCurrency = signal<PaymentCurrency>('USD');
 
   artworkId = '';
 
@@ -76,6 +85,26 @@ export class CheckoutComponent {
     if (!art) return this.locale.locale() === 'ar' ? 'العمل المختار' : 'Selected artwork';
     const isAr = this.locale.locale() === 'ar';
     return (isAr ? (art.titleAr || art.title_ar) : (art.titleEn || art.title_en)) || art.title || art.name || '';
+  }
+
+  /** Price in EGP */
+  getArtworkPriceEgp(): number {
+    const art = this.artwork();
+    if (!art) return 0;
+    return Number(art.onSale && art.discountPrice != null ? art.discountPrice : art.price) || 0;
+  }
+
+  /** Approximate converted price for display only */
+  getConvertedPrice(): string {
+    const egp = this.getArtworkPriceEgp();
+    if (!egp) return '—';
+    const cur = this.selectedCurrency();
+    const rate = DISPLAY_RATES[cur];
+    return (egp * rate).toFixed(2);
+  }
+
+  selectCurrency(cur: PaymentCurrency): void {
+    this.selectedCurrency.set(cur);
   }
 
   onDragOver(event: DragEvent): void {
@@ -178,7 +207,7 @@ export class CheckoutComponent {
       return;
     }
 
-    // 2) DIRECT CATALOG PURCHASE MODE
+    // 2) DIRECT CATALOG PURCHASE MODE - via PayPal
     if (this.form.invalid || !this.artworkId) return;
     this.submitting.set(true);
     const raw = this.form.getRawValue();
@@ -186,6 +215,7 @@ export class CheckoutComponent {
       customerName: raw.customerName.trim(),
       phone: raw.phone.trim(),
       shippingAddress: raw.shippingAddress.trim(),
+      paymentCurrency: this.selectedCurrency(),
       items: [{ artworkId: this.artworkId, quantity: 1 }]
     };
 
@@ -203,7 +233,8 @@ export class CheckoutComponent {
       next: (r) => {
         this.success.set(r);
         this.submitting.set(false);
-        const targetUrl = r.paymentUrl || r.iframeUrl || r.checkoutUrl;
+        // Redirect to PayPal approval page
+        const targetUrl = r.checkoutUrl || r.paymentUrl || r.iframeUrl;
         if (targetUrl) {
           window.location.href = String(targetUrl);
         }
@@ -216,3 +247,5 @@ export class CheckoutComponent {
     });
   }
 }
+
+

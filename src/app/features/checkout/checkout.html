@@ -33,6 +33,9 @@
       <span class="success__icon">✦</span>
       <h2>{{ locale.locale() === 'ar' ? 'تم إنشاء طلبك بنجاح' : 'Your order is in' }}</h2>
       <p>{{ locale.locale() === 'ar' ? 'رقم الطلب' : 'Order number' }}: <strong>{{ order.orderNumber || order.id }}</strong></p>
+      <p style="margin-top:0.5rem; opacity:0.7; font-size:0.9rem;">
+        {{ locale.locale() === 'ar' ? 'جاري تحويلك إلى PayPal...' : 'Redirecting you to PayPal...' }}
+      </p>
     </div>
   } @else {
     <form [formGroup]="form" (ngSubmit)="submit()">
@@ -139,22 +142,58 @@
         }
       </div>
 
-      <!-- Completely hide summary for custom requests: no 'العمل المختار' and no 'EGP'! -->
+      <!-- Order summary + currency selector (direct purchase only) -->
       @if (!isCustomRequest) {
         <div class="checkout__summary">
-          <span>{{ getArtworkTitle() }}</span>
-          <strong>{{ (artwork()?.discountPrice ?? artwork()?.price) || '—' }} EGP</strong>
+          <div class="checkout__summary-row">
+            <span>{{ getArtworkTitle() }}</span>
+            <strong>{{ (artwork()?.discountPrice ?? artwork()?.price) || '—' }} EGP</strong>
+          </div>
+
+          <!-- Currency selector -->
+          <div class="currency-selector">
+            <p class="currency-selector__label">
+              {{ locale.locale() === 'ar' ? 'عملة الدفع عبر PayPal:' : 'Pay via PayPal in:' }}
+            </p>
+            <div class="currency-selector__buttons">
+              <button 
+                type="button" 
+                class="currency-btn" 
+                [class.currency-btn--active]="selectedCurrency() === 'USD'"
+                (click)="selectCurrency('USD')">
+                🇺🇸 USD
+              </button>
+              <button 
+                type="button" 
+                class="currency-btn" 
+                [class.currency-btn--active]="selectedCurrency() === 'EUR'"
+                (click)="selectCurrency('EUR')">
+                🇪🇺 EUR
+              </button>
+            </div>
+            <p class="currency-selector__approx">
+              ≈ {{ getConvertedPrice() }} {{ selectedCurrency() }}
+              <span class="currency-selector__note">
+                {{ locale.locale() === 'ar' ? '(سعر تقريبي — السعر الفعلي يتحدد لحظة الدفع)' : '(approx. — exact rate applied at payment)' }}
+              </span>
+            </p>
+          </div>
+
+          <!-- PayPal logo note -->
+          <div class="paypal-note">
+            <span>🔒</span>
+            {{ locale.locale() === 'ar' ? 'الدفع الآمن عبر' : 'Secure payment via' }}
+            <strong>PayPal</strong>
+          </div>
         </div>
       }
 
       <div class="submit-wrap">
         <button class="submit" type="submit" [disabled]="isSubmitDisabled">
-          {{ submitting() ? (locale.locale() === 'ar' ? 'جاري الإرسال...' : 'Submitting...') : (isCustomRequest ? (locale.locale() === 'ar' ? 'إرسال طلب العمل الفني إلى الفنان' : 'Send Request to Artist') : (locale.locale() === 'ar' ? 'المتابعة إلى الدفع' : 'Continue to payment')) }}
+          {{ submitting() ? (locale.locale() === 'ar' ? 'جاري الإرسال...' : 'Submitting...') : (isCustomRequest ? (locale.locale() === 'ar' ? 'إرسال طلب العمل الفني إلى الفنان' : 'Send Request to Artist') : (locale.locale() === 'ar' ? 'المتابعة إلى PayPal' : 'Continue to PayPal')) }}
           <span>{{ locale.locale() === 'ar' ? '←' : '→' }}</span>
         </button>
       </div>
     </form>
   }
 </main>
-
-
