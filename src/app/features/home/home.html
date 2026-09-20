@@ -87,20 +87,77 @@
       </div>
       <div class="course-grid">
         @for (course of courses(); track course.id) {
-          <a class="course" [href]="course.externalUrl || course.welcomeVideoUrl || '#'" target="_blank" rel="noreferrer">
+          <div class="course" (click)="openCourse(course, $event)" tabindex="0" role="button" (keydown.enter)="openCourse(course, $event)">
             <span class="course__number">0{{ $index + 1 }}</span>
             <h3>{{ courseTitle(course) }}</h3>
             <p>{{ courseDescription(course) }}</p>
-            @if (course.welcomeVideoUrl) {
-              <div style="margin-top: 1rem; display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--gold);">
-                <span>▶ {{ locale.locale() === 'ar' ? 'فيديو تعريفي' : 'Intro Video' }}</span>
-              </div>
-            }
+            <div class="course__meta-bar">
+              @if (course.welcomeVideoUrl) {
+                <span class="course__video-badge">
+                  <span>🎬</span> {{ locale.locale() === 'ar' ? 'فيديو تعريفي' : 'Intro Video' }}
+                </span>
+              }
+              <span class="course__action-hint">
+                {{ locale.locale() === 'ar' ? 'عرض التفاصيل والاشتراك' : 'Details & Enroll' }}
+              </span>
+            </div>
             <span class="course__arrow">↗</span>
-          </a>
+          </div>
         }
       </div>
     </section>
+
+    <!-- Course Detail Modal -->
+    @if (selectedCourse(); as course) {
+      <div class="course-modal-backdrop" (click)="closeCourse()">
+        <div class="course-modal" (click)="$event.stopPropagation()">
+          <button type="button" class="course-modal__close" (click)="closeCourse()" [attr.aria-label]="locale.locale() === 'ar' ? 'إغلاق' : 'Close'">✕</button>
+
+          <div class="course-modal__header">
+            <span class="course-modal__badge">
+              {{ locale.locale() === 'ar' ? 'دورة تدريبية متخصصة' : 'Specialized Course' }}
+            </span>
+            <h2>{{ courseTitle(course) }}</h2>
+          </div>
+
+          @if (course.welcomeVideoUrl) {
+            <div class="course-modal__video-box">
+              <video 
+                controls 
+                playsinline 
+                preload="metadata"
+                class="course-modal__video"
+                [src]="course.welcomeVideoUrl">
+                {{ locale.locale() === 'ar' ? 'متصفحك لا يدعم تشغيل الفيديو.' : 'Your browser does not support video playback.' }}
+              </video>
+            </div>
+          }
+
+          <div class="course-modal__content">
+            <h4 class="course-modal__section-title">
+              {{ locale.locale() === 'ar' ? 'عن هذا الكورس:' : 'About this course:' }}
+            </h4>
+            <p class="course-modal__description">{{ courseDescription(course) }}</p>
+          </div>
+
+          <div class="course-modal__actions">
+            @if (course.externalUrl) {
+              <a 
+                [href]="course.externalUrl" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="course-modal__enroll-btn">
+                <span>{{ locale.locale() === 'ar' ? 'الانتقال إلى منصة الكورس' : 'Enroll in Course' }}</span>
+                <span class="arrow">↗</span>
+              </a>
+            }
+            <button type="button" class="course-modal__close-btn" (click)="closeCourse()">
+              {{ locale.locale() === 'ar' ? 'إغلاق' : 'Close' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    }
   }
 
   <section class="contact section container" id="contact">

@@ -6,11 +6,8 @@ import { ArtworkService, ClientRequestService, OrderService } from '../../core/s
 import { Artwork, OrderResponse, PaymentCurrency } from '../../core/models/api.models';
 import { LocaleService } from '../../core/services/ui.services';
 
-// Rough exchange rate display values (for UI only; real conversion happens on the server)
-const DISPLAY_RATES: Record<PaymentCurrency, number> = {
-  USD: 0.021,
-  EUR: 0.019,
-};
+// Approximate USD→EUR display rate (for UI only; real conversion happens on the server)
+const USD_TO_EUR_DISPLAY: number = 0.92;
 
 @Component({
   selector: 'app-checkout',
@@ -87,20 +84,20 @@ export class CheckoutComponent {
     return (isAr ? (art.titleAr || art.title_ar) : (art.titleEn || art.title_en)) || art.title || art.name || '';
   }
 
-  /** Price in EGP */
-  getArtworkPriceEgp(): number {
+  /** Price in USD (base currency stored in DB) */
+  getArtworkPriceUsd(): number {
     const art = this.artwork();
     if (!art) return 0;
     return Number(art.onSale && art.discountPrice != null ? art.discountPrice : art.price) || 0;
   }
 
-  /** Approximate converted price for display only */
+  /** Converted price for display (USD→EUR when EUR selected; otherwise same as USD) */
   getConvertedPrice(): string {
-    const egp = this.getArtworkPriceEgp();
-    if (!egp) return '—';
+    const usd = this.getArtworkPriceUsd();
+    if (!usd) return '—';
     const cur = this.selectedCurrency();
-    const rate = DISPLAY_RATES[cur];
-    return (egp * rate).toFixed(2);
+    if (cur === 'USD') return usd.toFixed(2);
+    return (usd * USD_TO_EUR_DISPLAY).toFixed(2);
   }
 
   selectCurrency(cur: PaymentCurrency): void {

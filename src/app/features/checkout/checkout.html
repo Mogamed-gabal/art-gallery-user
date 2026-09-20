@@ -147,7 +147,13 @@
         <div class="checkout__summary">
           <div class="checkout__summary-row">
             <span>{{ getArtworkTitle() }}</span>
-            <strong>{{ (artwork()?.discountPrice ?? artwork()?.price) || '—' }} EGP</strong>
+            <strong>
+              @if (selectedCurrency() === 'USD') {
+                ${{ (artwork()?.discountPrice ?? artwork()?.price) || '—' }}
+              } @else {
+                ≈ {{ getConvertedPrice() }} EUR
+              }
+            </strong>
           </div>
 
           <!-- Currency selector -->
@@ -161,22 +167,24 @@
                 class="currency-btn" 
                 [class.currency-btn--active]="selectedCurrency() === 'USD'"
                 (click)="selectCurrency('USD')">
-                🇺🇸 USD
+                🇺🇸 USD ($)
               </button>
               <button 
                 type="button" 
                 class="currency-btn" 
                 [class.currency-btn--active]="selectedCurrency() === 'EUR'"
                 (click)="selectCurrency('EUR')">
-                🇪🇺 EUR
+                🇪🇺 EUR (€)
               </button>
             </div>
-            <p class="currency-selector__approx">
-              ≈ {{ getConvertedPrice() }} {{ selectedCurrency() }}
-              <span class="currency-selector__note">
-                {{ locale.locale() === 'ar' ? '(سعر تقريبي — السعر الفعلي يتحدد لحظة الدفع)' : '(approx. — exact rate applied at payment)' }}
-              </span>
-            </p>
+            @if (selectedCurrency() === 'EUR') {
+              <p class="currency-selector__approx">
+                ${{ (artwork()?.discountPrice ?? artwork()?.price) || 0 }} USD ≈ {{ getConvertedPrice() }} EUR
+                <span class="currency-selector__note">
+                  {{ locale.locale() === 'ar' ? '(سعر تقريبي — السعر الفعلي يتحدد لحظة الدفع)' : '(approx. — exact rate applied at payment)' }}
+                </span>
+              </p>
+            }
           </div>
 
           <!-- PayPal logo note -->

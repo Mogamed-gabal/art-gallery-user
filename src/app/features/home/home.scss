@@ -421,6 +421,231 @@
   &:hover &__arrow {
     transform: translate(3px, -3px);
   }
+
+  cursor: pointer;
+
+  &__meta-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+  }
+
+  &__video-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  &__action-hint {
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  &:hover &__action-hint {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+}
+
+// ── Course Detail Modal ───────────────────────────────────────────────────────
+.course-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 9, 8, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeInModal 0.25s ease-out;
+}
+
+.course-modal {
+  position: relative;
+  background: var(--paper, #fff);
+  color: var(--ink, #111);
+  border: 1px solid var(--gold, #d4af37);
+  border-radius: 14px;
+  max-width: 680px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2.2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &__close {
+    position: absolute;
+    top: 1.2rem;
+    inset-inline-end: 1.2rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #ef4444;
+      color: #fff;
+      border-color: #ef4444;
+    }
+  }
+
+  &__header {
+    margin-bottom: 1.4rem;
+    padding-inline-end: 2.5rem;
+
+    h2 {
+      font: 600 clamp(1.5rem, 4vw, 2.2rem) / 1.25 var(--font-display);
+      margin: 0.5rem 0 0;
+      color: var(--ink);
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    color: var(--gold);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__video-box {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--line);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+
+  &__video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+  }
+
+  &__content {
+    margin-bottom: 2rem;
+  }
+
+  &__section-title {
+    font-size: 0.85rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.6rem;
+    font-weight: 700;
+  }
+
+  &__description {
+    font-size: 0.98rem;
+    line-height: 1.75;
+    color: var(--muted);
+    white-space: pre-line;
+    margin: 0;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-top: 1.2rem;
+    border-top: 1px solid var(--line);
+  }
+
+  &__enroll-btn {
+    flex: 1 1 220px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    padding: 0.9rem 1.8rem;
+    background: linear-gradient(135deg, #fae0ad, #d4af37 60%, #b38b52);
+    color: #121110;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(212, 175, 55, 0.45);
+    }
+
+    .arrow {
+      font-size: 1.1rem;
+    }
+  }
+
+  &__close-btn {
+    padding: 0.9rem 1.6rem;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--surface);
+      color: var(--ink);
+    }
+  }
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 580px) {
+  .course-modal {
+    padding: 1.5rem 1.2rem;
+
+    &__actions {
+      flex-direction: column;
+      align-items: stretch;
+
+      .course-modal__enroll-btn,
+      .course-modal__close-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
 }
 
 /* ----------------------------------------------------
@@ -610,6 +835,13 @@
     .section-note {
       max-width: 100%;
     }
+  }
+
+  .art-grid,
+  .original-grid,
+  .course-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .about__image {

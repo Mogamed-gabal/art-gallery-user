@@ -79,9 +79,11 @@
 
   h3 {
     margin: 0;
-    font: 600 1.15rem / 1.25 var(--font-display);
+    font: 600 1.15rem / 1.4 var(--font-display);
     color: var(--ink);
     transition: color 0.2s;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 }
 
@@ -93,6 +95,19 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  flex-shrink: 0;
+}
+
+:host-context([dir="rtl"]) {
+  .art-card__meta h3 {
+    font-size: 1.05rem;
+    line-height: 1.5;
+  }
+
+  .art-card__tag {
+    letter-spacing: normal;
+    font-size: 0.72rem;
+  }
 }
 
 .price {

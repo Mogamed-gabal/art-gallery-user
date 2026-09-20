@@ -17,6 +17,7 @@ export class HomeComponent {
   readonly originals = signal<Artwork[]>([]);
   readonly categories = signal<Category[]>([]);
   readonly courses = signal<Course[]>([]);
+  readonly selectedCourse = signal<Course | null>(null);
   readonly site = signal<SiteInfoResponse>({});
   readonly loading = signal(true);
   readonly error = signal(false);
@@ -156,6 +157,15 @@ export class HomeComponent {
     const isAr = this.locale.locale() === 'ar';
     const directDesc = typeof course.description === 'string' ? course.description : this.locale.text(course.description);
     return (isAr ? course.descriptionAr : course.descriptionEn) || directDesc || course.descriptionAr || course.descriptionEn || '';
+  }
+
+  openCourse(course: Course, event?: Event): void {
+    if (event) event.preventDefault();
+    this.selectedCourse.set(course);
+  }
+
+  closeCourse(): void {
+    this.selectedCourse.set(null);
   }
 
   text(key: string, fallback: string): string {

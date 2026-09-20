@@ -29,11 +29,11 @@
 
       <div class="detail__price">
         <span *ngIf="art.onSale && art.discountPrice" class="sale-price">
-          {{ art.discountPrice }} <small>EGP</small>
-          <span class="original-price-strike">{{ art.price }} EGP</span>
+          <small>$</small>{{ art.discountPrice }}
+          <span class="original-price-strike"><small>$</small>{{ art.price }}</span>
         </span>
         <span *ngIf="!art.onSale || !art.discountPrice">
-          {{ art.price ?? '—' }} <small>EGP</small>
+          <small>$</small>{{ art.price ?? '—' }}
         </span>
       </div>
 
